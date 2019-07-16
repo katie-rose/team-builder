@@ -1,48 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 
-export default function Form() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
+export default function Form(props) {
+  const [input, setInput] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    role: ""
+  });
 
-  const handleNameChange = event => {
-    setName(event.target.value);
+    useEffect(() => {
+      setInput(props.memberToEdit);
+    }, [props.memberToEdit]);
+
+  const handleChanges = event => {
+    setInput({ ...input, [event.target.name]: event.target.value });
   };
 
-  const handleEmailChange = event => {
-    setEmail(event.target.value);
-  };
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    console.log(name);
-    console.log(email);
-  };
   return (
     <div className="App">
-      {console.log(name)}
-      <form>
+      <form
+        onSubmit={event =>
+          props.handleSubmit(event, input, props.memberToEdit)
+        }
+      >
         <label>
-          name:
-          <input type="text" onChange={event => handleNameChange(event)} />
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={input.name}
+            onChange={event => handleChanges(event)}
+            placeholder="Your Name"
+          />
         </label>
-        <button onSubmit={() => handleSubmit()}>Submit</button>
-      </form>
-      {console.log(email)}
-      <form>
         <label>
-          email:
-          <input type="text" onChange={event => handleEmailChange(event)} />
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={input.email}
+            onChange={event => handleChanges(event)}
+          />
         </label>
-        <button onSubmit={() => handleSubmit()}>Submit</button>
-      </form>
-      <form>
-        {console.log(role)}
         <label>
-          role:
-          <input type="text" onChange={event => setRole(event.target.value)} />
-          <button onSubmit={() => handleSubmit()}>Submit</button>
+          Phone:
+          <input
+            type="text"
+            name="role"
+            value={input.phone}
+            onChange={event => handleChanges(event)}
+          />
+        </label>
+        <label>
+          Role:
+          <input
+            type="text"
+            name="role"
+            value={input.role}
+            onChange={event => handleChanges(event)}
+          />
+          <button className="btn">Submit</button>
         </label>
       </form>
     </div>
